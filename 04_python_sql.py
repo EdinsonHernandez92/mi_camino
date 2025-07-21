@@ -36,6 +36,26 @@ try:
     # Usamos un cursor para ejecutar comandos SQL. Es como nuestro "control remoto".
     cur = conn.cursor()
 
+    # -- EJECUTAR UN COMANDO (INSERTAR DATOS) --
+    print("\nInsertando un nuevo libro...")
+    try:
+        #Los datos del nuevo libro que queremos insertar
+        nuevo_libro = ("El túnel","Ernesto Sábato", 1948)
+        
+        #La consulta SQL con marcadores de posición (%s) para seguridad
+        sql_insert = "INSERT INTO libros (titulo, autor, anio_publicacion) VALUES (%s, %s, %s);"
+        #Ejecutamos la consulta pasando los datos de forma segura
+        cur.execute(sql_insert, nuevo_libro)
+        #Hacemos "commit" de la transacción para guardar los cambios en la base de datos
+        #IMPORTANTE: commit() es necesario para INSERT, UPDATE y DELETE.
+        conn.commit()
+
+        print("¡Nuevo libro insertado con éxito!")
+    except Exception as e:
+        print(f"Ocurrió un error al insertar: {e}")
+        #Si hay un error, hacemos "rollback" para deshacer cualquier cambio parcial.
+        conn.rollback()
+
     # ---Ejecutar una consulta (Leer datos)---
     print("\n--- Libros en la colección ---")
     cur.execute("SELECT id, titulo, autor, anio_publicacion FROM libros ORDER BY id;")

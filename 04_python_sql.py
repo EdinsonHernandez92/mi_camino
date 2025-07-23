@@ -56,6 +56,36 @@ try:
         #Si hay un error, hacemos "rollback" para deshacer cualquier cambio parcial.
         conn.rollback()
 
+    # --- Ejecutar un comando (Actualizar Datos)
+    print("\nActualizando un libro...")
+    try:
+        #Datos para la actualización: el nuevo año y el título del libro a cambiar
+        datos_update = (1950, "El túnel")
+        sql_update = "UPDATE libros SET anio_publicacion = %s WHERE titulo = %s;"
+
+        cur.execute(sql_update, datos_update)
+        conn.commit()
+        print("¡Libro actualizado con éxito!")
+    except Exception as e:
+        print(f"Ocurrió un error al actualizar: {e}")
+        conn.rollback()
+
+
+    # ---Ejecutar un comando (Eliminar Datos)
+    print("\nEliminando un libro...")
+    try:
+        #ID del libro a eliminar
+        id_a_eliminar = (1,) # ¡La coma es importante para que sea una tupla!
+        sql_delete = "DELETE FROM libros WHERE id = %s;"
+
+        cur.execute(sql_delete, id_a_eliminar)
+        conn.commit()
+        print("¡Libro eliminado con éxito!")
+    except Exception as e:
+        print(f"Ocurrió un error al eliminar: {e}")
+        conn.rollback()
+
+
     # ---Ejecutar una consulta (Leer datos)---
     print("\n--- Libros en la colección ---")
     cur.execute("SELECT id, titulo, autor, anio_publicacion FROM libros ORDER BY id;")
